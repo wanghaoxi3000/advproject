@@ -1,0 +1,33 @@
+basePath: /api/v1
+definitions:
+  serializer.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      error:
+        type: string
+      result:
+        type: boolean
+    type: object
+info:
+  contact:
+    email: wanghaoxi3000@163.com
+    name: wanghaoxi3000
+  description: advanced project
+  license: {}
+  title: Gin swagger
+  version: "1.0"
+paths:
+  /status:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializer.Response'
+      summary: 状态输出
+      tags:
+      - status
+swagger: "2.0"
