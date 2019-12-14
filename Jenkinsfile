@@ -9,6 +9,10 @@ pipeline {
       timestamps()
   }
 
+  environment {
+    CHANGE_LOG = sh returnStdout: true, script: 'git log --pretty=format:\'%h - %an,%ar : %s\' --since=\'1 hours\' | head -n 1'
+  }
+
   stages {
     stage('Test') {
       agent {
@@ -36,9 +40,9 @@ pipeline {
   post {
     always {
       withCredentials([string(credentialsId: 'PUSH_KEY', variable: 'PUSH_KEY')]) {
-          echo "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}` ${PUSH_KEY}"
-          sh "curl -d 'text=${currentBuild.projectName} 集成 ${currentBuild.result}' -d 'desp=change: `${currentBuild.description}`' 'https://sc.ftqq.com/${PUSH_KEY}.send'"
-          httpRequest consoleLogResponseBody: true, httpMode: 'POST',  contentType: 'APPLICATION_FORM', requestBody: "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}`", responseHandle: 'NONE', url: "https://sc.ftqq.com/${PUSH_KEY}.send"
+        echo "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult} ${env.CHANGE_LOG}"
+        sh "curl -d 'text=${currentBuild.projectName} 集成 ${currentBuild.result}' -d 'desp=change log: `${env.CHANGE_LOG}`' 'https://sc.ftqq.com/${PUSH_KEY}.send'"
+        // httpRequest consoleLogResponseBody: true, httpMode: 'POST',  contentType: 'APPLICATION_FORM', requestBody: "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}`", responseHandle: 'NONE', url: "https://sc.ftqq.com/${PUSH_KEY}.send"
       }
     }
   }
