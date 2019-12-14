@@ -40,9 +40,7 @@ pipeline {
   post {
     always {
       withCredentials([string(credentialsId: 'PUSH_KEY', variable: 'PUSH_KEY')]) {
-        echo "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult} ${env.CHANGE_LOG}"
-        sh "curl -d 'text=${currentBuild.projectName} 集成 ${currentBuild.result}' -d 'desp=change log: `${env.CHANGE_LOG}`' 'https://sc.ftqq.com/${PUSH_KEY}.send'"
-        // httpRequest consoleLogResponseBody: true, httpMode: 'POST',  contentType: 'APPLICATION_FORM', requestBody: "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}`", responseHandle: 'NONE', url: "https://sc.ftqq.com/${PUSH_KEY}.send"
+        sh "curl -s -d 'text=项目 ${currentBuild.projectName} 集成结果: ${currentBuild.result}' -d 'desp=change log: `${env.CHANGE_LOG}`' 'https://sc.ftqq.com/${PUSH_KEY}.send'"
       }
     }
   }
