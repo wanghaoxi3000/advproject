@@ -1,5 +1,10 @@
 pipeline {
   agent none
+
+  options {
+      timeout(time: 3, unit: 'MINUTES')
+  }
+
   stages {
     stage('Test') {
       agent {
