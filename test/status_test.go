@@ -14,7 +14,7 @@ import (
 func TestRouterStatus(t *testing.T) {
 	router := server.SetupRouter()
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/api/v1/status/", nil)
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/status", nil)
 	router.ServeHTTP(w, req)
 
 	response := serializer.Response{}
