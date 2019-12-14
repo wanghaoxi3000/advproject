@@ -2,6 +2,7 @@ package config
 
 import "os"
 
+// BaseConfig 项目基础配置
 type BaseConfig interface {
 	GetDevMode() string
 }
@@ -22,6 +23,7 @@ func defaultBaseConfig() *envBaseConfig {
 	}
 }
 
+// GetBaseConfig 获取基础配置Map
 func GetBaseConfig() BaseConfig {
 	config := defaultBaseConfig()
 	for envName := range config.config {
