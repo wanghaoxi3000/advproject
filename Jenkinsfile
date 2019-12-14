@@ -25,15 +25,20 @@ pipeline {
       steps {
         sh 'docker build -t advproject .'
       }
+      post {
+        success {
+          sh 'docker rmi `docker images | awk \'/^<none>/ { print $3 }\'`'
+        }
+      }
     }
   }
 
   post {
     always {
       withCredentials([string(credentialsId: 'PUSH_KEY', variable: 'PUSH_KEY')]) {
-        sh '''
-          curl -d "text=${currentBuild.projectName} 集成 ${currentBuild.result}" -d "desp=change: `${CHANGE_TITLE}`" "https://sc.ftqq.com/${PUSH_KEY}.send"
-        '''
+          echo "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}` ${PUSH_KEY}"
+          sh "curl -d 'text=${currentBuild.projectName} 集成 ${currentBuild.result}' -d 'desp=change: `${currentBuild.description}`' 'https://sc.ftqq.com/${PUSH_KEY}.send'"
+          httpRequest consoleLogResponseBody: true, httpMode: 'POST',  contentType: 'APPLICATION_FORM', requestBody: "text=${currentBuild.projectName} 集成 ${currentBuild.currentResult}&desp=change: `${currentBuild.description}`", responseHandle: 'NONE', url: "https://sc.ftqq.com/${PUSH_KEY}.send"
       }
     }
   }
