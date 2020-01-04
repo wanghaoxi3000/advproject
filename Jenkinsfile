@@ -10,6 +10,9 @@ pipeline {
   }
 
   environment {
+    PROJECT_NAME = 'advproject'
+    DOCKER_REGISTER = 'ccr.ccs.tencentyun.com'
+    DOCKER_NAMESPCAE = 'darkreunion'
     CHANGE_LOG = sh returnStdout: true, script: 'git log --pretty=format:\'%h - %an,%ar : %s\' --since=\'1 hours\' | head -n 1'
   }
 
@@ -27,12 +30,24 @@ pipeline {
 
     stage('Build Docker') {
       steps {
-        sh 'docker build -t advproject .'
+        sh "docker build -t ${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME} ."
       }
       post {
         success {
           sh 'docker rmi `docker images | awk \'/^<none>/ { print $3 }\'`'
         }
+      }
+    }
+
+    stage('Push Docker') {
+      environment {
+        DOCKERHUB_USERNAME = credentials('docker-hub-username')
+        DOCKERHUB_PASSWD = credentials('docker-hub-passwd')
+      }
+
+      steps {
+        sh """docker login -u ${env.DOCKERHUB_USERNAME} -p ${env.DOCKERHUB_PASSWD} ${env.DOCKER_REGISTER}
+        docker push ${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME}:latest"""
       }
     }
   }
