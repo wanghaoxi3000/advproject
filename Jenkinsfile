@@ -24,30 +24,25 @@ pipeline {
         }
       }
       steps {
-        sh 'go test -v ./test'
+        sh '''go env -w GOPROXY=https://goproxy.cn,direct
+        go test -v ./test'''
       }
     }
 
     stage('Build Docker') {
       steps {
-        sh "docker build -t ${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME} ."
+        script {
+          withDockerRegistry(credentialsId: 'tcloud-docker-reg', url: 'https://ccr.ccs.tencentyun.com') {
+            def image = docker.build("${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME}:build-${BUILD_NUMBER}")
+            image.push()
+          }
+        }
       }
       post {
         success {
           sh 'docker rmi `docker images | awk \'/^<none>/ { print $3 }\'`'
+          sh "docker rmi ${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME}:build-${BUILD_NUMBER}"
         }
-      }
-    }
-
-    stage('Push Docker') {
-      environment {
-        DOCKERHUB_USERNAME = credentials('docker-hub-username')
-        DOCKERHUB_PASSWD = credentials('docker-hub-passwd')
-      }
-
-      steps {
-        sh """docker login -u ${env.DOCKERHUB_USERNAME} -p ${env.DOCKERHUB_PASSWD} ${env.DOCKER_REGISTER}
-        docker push ${env.DOCKER_REGISTER}/${env.DOCKER_NAMESPCAE}/${env.PROJECT_NAME}:latest"""
       }
     }
   }
