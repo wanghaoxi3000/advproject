@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "advanced project",
-        "title": "Gin swagger",
+        "title": "API doc",
         "contact": {
             "name": "wanghaoxi3000",
             "email": "wanghaoxi3000@163.com"
@@ -12,6 +12,22 @@
     },
     "basePath": "/api/v1",
     "paths": {
+        "/hostname": {
+            "get": {
+                "tags": [
+                    "status"
+                ],
+                "summary": "主机标识",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/serializer.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/status": {
             "get": {
                 "tags": [

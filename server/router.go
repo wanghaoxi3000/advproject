@@ -15,6 +15,7 @@ func SetupRouter() *gin.Engine {
 	v1 := r.Group("/api/v1")
 	{
 		v1.GET("/status", api.Status)
+		v1.GET("/hostname", api.Hostname)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

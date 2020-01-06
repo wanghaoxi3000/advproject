@@ -17,9 +17,19 @@ info:
     name: wanghaoxi3000
   description: advanced project
   license: {}
-  title: Gin swagger
+  title: API doc
   version: "1.0"
 paths:
+  /hostname:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializer.Response'
+      summary: 主机标识
+      tags:
+      - status
   /status:
     get:
       responses:
