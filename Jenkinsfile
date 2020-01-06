@@ -48,8 +48,11 @@ pipeline {
 
     stage('Deploy'){
       steps {
+        sh """rm -f deployment.yaml
+        sed -e s/{buildID}/${env.BUILD_NUMBER}/g deployment-template.yaml > deployment.yaml"""
+
         withKubeConfig([credentialsId: 'kubctl-config', serverUrl: "${env.K8S_SERVER}"]) {
-          sh 'kubectl get pods'
+          sh 'kubectl apply -f deployment.yaml'
         }
       }
     }
