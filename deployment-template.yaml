@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: advproject
+spec:
+  selector:
+    matchLabels:
+      app: advproject
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: advproject
+    spec:
+      containers:
+      - name: advproject
+        image: ccr.ccs.tencentyun.com/darkreunion/advproject:build-{buildID}
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+      imagePullSecrets:
+        - name: registry-secret
