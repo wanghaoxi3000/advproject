@@ -45,6 +45,14 @@ pipeline {
         }
       }
     }
+
+    stage('Deploy'){
+      steps {
+        withKubeConfig([credentialsId: 'kubctl-config', serverUrl: "${env.K8S_SERVER}"]) {
+          sh 'kubectl get pods'
+        }
+      }
+    }
   }
 
   post {
