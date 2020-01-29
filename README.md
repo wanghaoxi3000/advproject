@@ -12,6 +12,7 @@
 
 **代码结构**
 ```
+.
 ├── Dockerfile                  // Docker镜像打包文件
 ├── Jenkinsfile                 // Jenkins CI 定义
 ├── README.md
@@ -62,5 +63,13 @@ RUN_MODE | 测试/生产环境 | develop | develop, prod
 
 ### 监控及日志记录
 #### 日志输出
+使用Uber开源的高性能日志框架zap来作为日志输出，直接使用了zap默认的格式配置，在develop开发环境下以易读的行模式输出，prod生产下以结构化模式输出。
 
-### 基础设施即代码
+#### 状态接口
+- 状态输出，可通过定时请求来防范系统假死 `/api/v1/status`
+- hostname输出，在多节点部署时测试是哪个节点 `/api/v1/hostname`
+
+#### 基础设施即代码
+- [Dockerfile](Dockerfile) docker容器化文件
+- [Jenkinsfile](Jenkinsfile) Jenkins Pipline流程定义文件
+- [deployment](deployment-template.yaml) Kubernetes部署文件
