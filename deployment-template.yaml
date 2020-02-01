@@ -18,11 +18,11 @@ spec:
         ports:
         - containerPort: 3000
           protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /api/v1/status
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 30
       imagePullSecrets:
         - name: registry-secret
-      livenessProbe:
-          httpGet:
-            path: /api/v1/hostname
-            port: 3000
-            initialDelaySeconds: 5
-            periodSeconds: 30
