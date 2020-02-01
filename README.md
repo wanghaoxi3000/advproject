@@ -66,7 +66,7 @@ RUN_MODE | 测试/生产环境 | develop | develop, prod
 使用Uber开源的高性能日志框架zap来作为日志输出，直接使用了zap默认的格式配置，在develop开发环境下以易读的行模式输出，prod生产下以结构化模式输出。
 
 #### 状态接口
-- 状态输出，可通过定时请求来防范系统假死 `/api/v1/status`
+- 状态输出，用于定时请求进行健康检查 `/api/v1/status`
 - hostname输出，在多节点部署时测试是哪个节点 `/api/v1/hostname`
 
 #### 基础设施即代码

@@ -25,5 +25,3 @@ func Hostname(c *gin.Context) {
 	hostname := os.Getenv("HOSTNAME")
 	serializer.SuccessResponse(c, hostname)
 }
-
-// TODO: 状态输出控制
