@@ -15,6 +15,9 @@ spec:
       containers:
       - name: advproject
         image: ccr.ccs.tencentyun.com/darkreunion/advproject:build-{buildID}
+        env:
+          - name: RUN_MODE
+            value: "prod"
         ports:
         - containerPort: 3000
           protocol: TCP
