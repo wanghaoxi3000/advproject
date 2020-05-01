@@ -2,7 +2,7 @@ package test
 
 import (
 	"advancedproject/serializer"
-	"advancedproject/server"
+	"advancedproject/router"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -12,7 +12,7 @@ import (
 )
 
 func TestRouterStatus(t *testing.T) {
-	router := server.SetupRouter()
+	router := router.SetupRouter()
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/api/v1/status", nil)
 	router.ServeHTTP(w, req)
